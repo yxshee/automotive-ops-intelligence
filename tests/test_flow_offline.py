@@ -99,4 +99,16 @@ def test_fixture_json_is_valid_and_sorted_keys_stable():
         .read_text(encoding="utf-8")
     )
     payload = json.loads(raw)
-    assert set(payload) == {"scope", "opportunities"}
+    assert {"scope", "opportunities"} <= set(payload)
+
+
+def test_narrative_reaches_the_rendered_brief():
+    """Sequencing judgment and disclosure are analyst-supplied, not agent-generated."""
+    brief = run_offline().state.brief
+    assert brief is not None
+    assert brief.horizon_30_60_90, "expected a 30/60/90 plan"
+    assert brief.author_note, "expected an author note disclosing method"
+
+    rendered = render_brief(brief)
+    assert "First 90 days" in rendered
+    assert "outside-in analysis" in rendered

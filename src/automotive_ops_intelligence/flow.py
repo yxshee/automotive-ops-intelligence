@@ -41,6 +41,11 @@ class BriefState(BaseModel):
     opportunities: list[Opportunity] = Field(default_factory=list)
     brief: Brief | None = None
 
+    # Narrative the analyst supplies rather than the model: sequencing judgment
+    # and any disclosure the reader is owed.
+    horizon_30_60_90: list[str] = Field(default_factory=list)
+    author_note: str = ""
+
     gap_report: list[str] = Field(default_factory=list)
 
 
@@ -67,9 +72,15 @@ class AutomationBriefFlow(Flow[BriefState]):
         assert self.state.scope is not None
 
         if self.state.offline:
-            from automotive_ops_intelligence.offline import load_fixture_opportunities
+            from automotive_ops_intelligence.offline import (
+                load_fixture_narrative,
+                load_fixture_opportunities,
+            )
 
             self.state.opportunities = load_fixture_opportunities(self.state.scope_hint)
+            narrative = load_fixture_narrative(self.state.scope_hint)
+            self.state.horizon_30_60_90 = narrative.get("horizon_30_60_90", [])
+            self.state.author_note = narrative.get("author_note", "")
             return "profiled"
 
         from automotive_ops_intelligence.crew import build_opportunity_crew
@@ -145,6 +156,8 @@ class AutomationBriefFlow(Flow[BriefState]):
             scope=self.state.scope,
             thesis=_synthesise_thesis(self.state.opportunities),
             opportunities=self.state.opportunities,
+            horizon_30_60_90=self.state.horizon_30_60_90,
+            author_note=self.state.author_note,
         )
         return "priced"
 

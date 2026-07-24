@@ -58,6 +58,21 @@ def load_fixture_opportunities(name: str = DEFAULT_FIXTURE) -> list[Opportunity]
     return [Opportunity.model_validate(o) for o in payload["opportunities"]]
 
 
+def load_fixture_narrative(name: str = DEFAULT_FIXTURE) -> dict:
+    """Return the analyst-supplied narrative: sequencing judgment and disclosures.
+
+    Deliberately not agent-generated. Which opportunity to start with is a
+    judgment about organisational readiness and political capital, not something
+    that falls out of a payback calculation — the highest-return opportunity and
+    the right first project are frequently different things.
+    """
+    payload = _load(name)
+    return {
+        "horizon_30_60_90": payload.get("horizon_30_60_90", []),
+        "author_note": payload.get("author_note", ""),
+    }
+
+
 def _slugify(name: str) -> str:
     """Map a loose organisation hint onto a fixture filename."""
     if not name:
