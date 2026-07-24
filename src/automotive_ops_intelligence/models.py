@@ -7,12 +7,12 @@ a missing number in it.
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
 
-class Confidence(str, Enum):
+class Confidence(StrEnum):
     """How well-grounded a claim is.
 
     Deliberately coarse. A model asked for a percentage confidence will happily
@@ -29,7 +29,7 @@ class Confidence(str, Enum):
     """An input we chose. Must be varied in sensitivity analysis."""
 
 
-class CostBasis(str, Enum):
+class CostBasis(StrEnum):
     """Whether a cost is money leaving the business or money never earned.
 
     This distinction decides how much weight a saving deserves. Cash cost

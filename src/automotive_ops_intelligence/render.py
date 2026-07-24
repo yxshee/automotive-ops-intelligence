@@ -62,7 +62,8 @@ def _render_summary_table(brief: Brief) -> list[str]:
     lines = [
         "## Summary",
         "",
-        f"| # | Opportunity | Total saving ({currency}) | of which cash | Payback | Cash floor |",
+        f"| # | Opportunity | Total saving ({currency}) | of which cash "
+        "| Payback | Cash floor |",
         "|---|---|---|---|---|---|",
     ]
     for o in brief.opportunities:
