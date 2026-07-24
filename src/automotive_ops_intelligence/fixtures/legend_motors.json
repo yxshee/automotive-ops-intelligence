@@ -1,0 +1,233 @@
+{
+  "scope": {
+    "organisation": "Legend Holding Group",
+    "business_unit": "Legend Motors (Trading, Dealership, AutoHub)",
+    "sector": "Multi-brand automotive trading, retail and fleet",
+    "geography": "United Arab Emirates, with KSA and China branches",
+    "public_facts": [
+      {
+        "claim": "Legend Motors Trading has exported vehicles since 2013, running roughly 7,000 vehicles annually across 10+ countries with annual sales up to USD 55M.",
+        "source_url": "https://www.legendholding.com/our-businesses/legend-motors-trading",
+        "confidence": "sourced"
+      },
+      {
+        "claim": "Legend Holding Group is investing AED 500M in a Jafza automotive hub, with Phase 1 at 5,000 vehicles (Apr 2026), Phase 2 at 20,000+ (Jan 2028), and 120,000+ vehicles per year at full operation, serving over 100 markets. The published specification explicitly includes 'advanced automated systems for vehicle management and logistics'.",
+        "source_url": "https://www.jafza.ae/resource-centre/media/news/legend-holding-group-to-invest-aed-500-million-in-major-automotive-hub-at-jafza/",
+        "confidence": "sourced"
+      },
+      {
+        "claim": "A second AED 300M hub at Dubai Industrial City, opening 2027, includes Legend AutoHub speced at 200,000+ pre-owned vehicles per year and is expected to create 700+ jobs.",
+        "source_url": "https://mediaoffice.ae/en/news/2025/november/06-11/legend-holding-group-to-develop-integrated-automotive",
+        "confidence": "sourced"
+      },
+      {
+        "claim": "Legend Motors is the exclusive UAE dealership for Kaiyi, exclusive importer for 212, and exclusive distributor for Skywell, reporting +54% Kaiyi sales growth across retail and fleet.",
+        "source_url": "https://www.legendholding.com/our-businesses/legend-motors-dealership",
+        "confidence": "sourced"
+      },
+      {
+        "claim": "Legend Motors maintains 79 live vehicle listings on DubiCars, indicating third-party portal distribution as an active retail channel.",
+        "source_url": "https://www.dubicars.com/dealers/dubai-legend-motors-259",
+        "confidence": "sourced"
+      },
+      {
+        "claim": "In May 2026 Legend Holding Group committed 1,000 vehicles and a fleet valued above USD 20M to Swapp's car-subscription platform, expanding across the GCC.",
+        "source_url": "https://mena.entrepreneur.com/business-news/legend-holding-group-commits-us20-million-vehicle-fleet-to-swapp-expands-car-subscriptions-across-uae-gcc",
+        "confidence": "sourced"
+      },
+      {
+        "claim": "The group launched Legend X, a robotics and AI venture, in August 2025 — evidence of existing appetite for funding AI bets.",
+        "source_url": "https://www.legendx.ae/about-us",
+        "confidence": "sourced"
+      },
+      {
+        "claim": "Scaling export volume roughly 17x while expanding from 10+ to 100+ destination markets multiplies per-vehicle documentation variants faster than it multiplies vehicles.",
+        "source_url": null,
+        "confidence": "inferred"
+      }
+    ]
+  },
+  "opportunities": [
+    {
+      "rank": 1,
+      "title": "Export documentation and compliance validation",
+      "thesis": "Every exported vehicle carries a document set whose required contents vary by destination market. Volume is scaling roughly 17x while destination count scales 10x, so the number of distinct document-rule combinations grows faster than headcount plausibly can.",
+      "process": {
+        "name": "Per-vehicle export document preparation and validation",
+        "description": "For each exported unit: assemble and validate the Vehicle Clearance Certificate, export certificate, customs declaration, bill of lading and destination-specific homologation evidence; correct discrepancies before submission.",
+        "currency": "AED",
+        "annual_volume": 7000,
+        "minutes_per_unit_manual": 45.0,
+        "fully_loaded_hourly_cost": 95.0,
+        "error_rate": 0.06,
+        "cost_per_error": 1800.0,
+        "error_cost_basis": "cash",
+        "evidence": [
+          {
+            "claim": "Approximately 7,000 vehicles exported annually across 10+ countries.",
+            "source_url": "https://www.legendholding.com/our-businesses/legend-motors-trading",
+            "confidence": "sourced"
+          },
+          {
+            "claim": "45 minutes of human touch time per vehicle document set.",
+            "source_url": null,
+            "confidence": "assumed"
+          },
+          {
+            "claim": "AED 95/hour fully loaded cost for a documentation officer.",
+            "source_url": null,
+            "confidence": "assumed"
+          },
+          {
+            "claim": "6% of document sets carry a defect requiring rework; AED 1,800 average cost per defect in re-filing, port storage and demurrage.",
+            "source_url": null,
+            "confidence": "assumed"
+          }
+        ]
+      },
+      "design": {
+        "approach": "Extract structured fields from each document, validate the set against a versioned per-destination rule pack, and surface only discrepancies to a human. Rules live as reviewable data, not prompt text, so a customs change is a diffable pull request rather than a prompt edit.",
+        "automatable_share": 0.7,
+        "adoption_rate": 0.6,
+        "minutes_per_unit_assisted": 8.0,
+        "residual_error_rate": 0.02,
+        "build_cost": 180000.0,
+        "annual_platform_cost": 60000.0,
+        "cost_per_unit_inference": 1.2,
+        "human_in_the_loop": "No document set is submitted to a customs authority without human approval. The system prepares and flags; a licensed officer signs. Any destination rule pack newer than 30 days routes every affected unit to review regardless of confidence."
+      },
+      "risks": [
+        {
+          "description": "A hallucinated or mis-extracted field on a regulatory filing creates legal exposure, not just rework.",
+          "mitigation": "Extraction is validated against the source document with field-level provenance; nothing is submitted without human sign-off; confidence below threshold routes to full manual handling.",
+          "severity": "high"
+        },
+        {
+          "description": "Destination rules change without notice, silently invalidating the rule pack.",
+          "mitigation": "Rule packs are versioned and dated; packs older than a set age force manual review; a rule change is a reviewed pull request with an owner.",
+          "severity": "medium"
+        },
+        {
+          "description": "Adoption stalls because documentation officers do not trust the output.",
+          "mitigation": "Ship in shadow mode first — the system prepares, humans work as before, and the two are compared. Publish the agreement rate before asking anyone to rely on it.",
+          "severity": "medium"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "rank": 2,
+      "title": "Pre-owned intake appraisal and residual pricing",
+      "thesis": "AutoHub is speced at 200,000+ pre-owned vehicles per year from 2027. Condition grading and reconditioning-cost estimation at that volume is a pricing problem with a direct margin consequence on every unit.",
+      "process": {
+        "name": "Pre-owned vehicle intake, condition grading and price setting",
+        "description": "For each intake unit: grade condition from inspection photos and history, estimate reconditioning cost, and set an acquisition and retail price against live market comparables.",
+        "currency": "AED",
+        "annual_volume": 24000,
+        "minutes_per_unit_manual": 35.0,
+        "fully_loaded_hourly_cost": 85.0,
+        "error_rate": 0.12,
+        "cost_per_error": 900.0,
+        "error_cost_basis": "opportunity",
+        "evidence": [
+          {
+            "claim": "Legend AutoHub is speced at 200,000+ pre-owned vehicles per year at the Dubai Industrial City hub opening 2027.",
+            "source_url": "https://mediaoffice.ae/en/news/2025/november/06-11/legend-holding-group-to-develop-integrated-automotive",
+            "confidence": "sourced"
+          },
+          {
+            "claim": "Modelled at 24,000 units per year — a deliberately conservative early-ramp figure, not the 200,000 target, since the facility opens in 2027.",
+            "source_url": null,
+            "confidence": "assumed"
+          },
+          {
+            "claim": "12% of units are mispriced by a margin-relevant amount, at an average cost of AED 900 per occurrence.",
+            "source_url": null,
+            "confidence": "assumed"
+          }
+        ]
+      },
+      "design": {
+        "approach": "Vision-based condition grading from standardised intake photography, combined with a reconditioning-cost model and a comparables-based pricing engine trained on the group's own transaction history. The model proposes a price band; a buyer sets the price inside it.",
+        "automatable_share": 0.55,
+        "adoption_rate": 0.5,
+        "minutes_per_unit_assisted": 10.0,
+        "residual_error_rate": 0.07,
+        "build_cost": 220000.0,
+        "annual_platform_cost": 90000.0,
+        "cost_per_unit_inference": 0.8,
+        "human_in_the_loop": "The system proposes a price band and a condition grade; a buyer confirms or overrides. Overrides are logged as training signal rather than discarded."
+      },
+      "risks": [
+        {
+          "description": "No transaction history is available at launch, so the pricing model has nothing to learn from.",
+          "mitigation": "Sequence this behind the data. Start with condition grading, which needs only photographs, and add pricing once intake volume has produced a labelled history.",
+          "severity": "high"
+        },
+        {
+          "description": "Systematic underpricing would be invisible in aggregate margin until it is expensive.",
+          "mitigation": "Hold out a random control sample priced manually; compare realised margin monthly.",
+          "severity": "medium"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "rank": 3,
+      "title": "Multi-brand lead triage and routing",
+      "thesis": "Three exclusive brands sold across retail, fleet and export through both owned channels and third-party portals means every inbound lead needs classifying by brand, channel and intent before anyone can act on it.",
+      "process": {
+        "name": "Inbound lead qualification, deduplication and routing",
+        "description": "Classify each inbound enquiry by brand, buyer type and intent; deduplicate against existing records; route to the correct showroom or fleet desk; draft a first response.",
+        "currency": "AED",
+        "annual_volume": 36000,
+        "minutes_per_unit_manual": 6.0,
+        "fully_loaded_hourly_cost": 70.0,
+        "error_rate": 0.15,
+        "cost_per_error": 220.0,
+        "error_cost_basis": "opportunity",
+        "evidence": [
+          {
+            "claim": "79 live listings on DubiCars confirm third-party portals as an active channel alongside owned showrooms.",
+            "source_url": "https://www.dubicars.com/dealers/dubai-legend-motors-259",
+            "confidence": "sourced"
+          },
+          {
+            "claim": "36,000 inbound leads per year (roughly 100/day) across three brands and three channels.",
+            "source_url": null,
+            "confidence": "assumed"
+          },
+          {
+            "claim": "15% of leads are misrouted, duplicated or answered too late to convert, at AED 220 average foregone margin. This is deliberately conservative: it assumes only a small fraction of mishandled leads would have converted. It is also opportunity cost, not cash, and is weighted accordingly in the ranking.",
+            "source_url": null,
+            "confidence": "assumed"
+          }
+        ]
+      },
+      "design": {
+        "approach": "Classify and deduplicate on arrival, route by brand and buyer type, and draft a first response in the enquiry's own language. Arabic and English are both first-class; a wrong-language reply is a lost lead.",
+        "automatable_share": 0.8,
+        "adoption_rate": 0.65,
+        "minutes_per_unit_assisted": 1.5,
+        "residual_error_rate": 0.05,
+        "build_cost": 120000.0,
+        "annual_platform_cost": 48000.0,
+        "cost_per_unit_inference": 0.35,
+        "human_in_the_loop": "Drafted responses are sent automatically only for informational enquiries. Anything involving price, finance or trade-in is queued for a salesperson."
+      },
+      "risks": [
+        {
+          "description": "An automated reply that misreads intent damages the brand at the first customer touchpoint.",
+          "mitigation": "Automate only informational replies at launch; hold anything commercial for human review; measure the escalation rate as a gated metric.",
+          "severity": "medium"
+        },
+        {
+          "description": "Portal integrations are brittle and change without notice.",
+          "mitigation": "Treat each portal as an untrusted external adapter with its own contract tests and an alert on schema drift.",
+          "severity": "low"
+        }
+      ],
+      "evidence": []
+    }
+  ]
+}
